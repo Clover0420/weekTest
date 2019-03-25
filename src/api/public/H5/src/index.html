@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+
+    <link href="css/mui.min.css" rel="stylesheet" />
+    <style>
+        ul {
+            margin: 5px;
+            padding: 5px;
+            list-style: none;
+        }
+        
+        img {
+            width: 100px;
+        }
+        
+        dl {
+            display: flex;
+        }
+        
+        dt {
+            width: 200px;
+        }
+        
+        li {
+            width: 100%;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        span {
+            font-size: 14px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="mui-bar mui-bar-nav">
+        <h1 class="mui-title">我的发布</h1>
+    </header>
+    <div class="mui-content">
+        <ul class="list">
+        </ul>
+    </div>
+
+    <script src="js/mui.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        mui.ajax('/getData', {
+            dataType: 'json', //服务器返回json格式数据
+            type: 'get', //HTTP请求类型
+            timeout: 10000, //超时时间设置为10秒；
+            success: function(data) {
+                var datas = data.data;
+                var str = '';
+                console.log(datas);
+                datas.forEach(item => {
+                    str += `<li data-id="${item._id}">
+                                <p>${item.name}</p>
+                                <dl>
+                                    <dt>    
+                                        <h4>${item.tit}</h4>
+                                        <span>${item.message}</span>
+                                        <p>${item.time}</p>
+                                    </dt>
+                                    <dd>
+                                        <img src="img/${item.img}" alt="">
+                                    </dd>
+                                </dl>
+                            </li>`;
+                })
+                document.querySelector(".list").innerHTML = str;
+                var lis = document.querySelectorAll(".list li");
+                lis.forEach(item => {
+                    item.onclick = function() {
+                        location.href = './message.html?id=' + item.getAttribute("data-id")
+                    }
+                })
+            },
+            error: function(xhr, type, errorThrown) {
+                console.log(xhr)
+            }
+        });
+    </script>
+</body>
+
+</html>
